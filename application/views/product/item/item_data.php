@@ -8,7 +8,8 @@
     </ol>
  </section>
 <section class="content">
-    <?php $this->view('message')?>
+<?php //$this->view('message')?>
+    <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div>
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Products</h3>
@@ -35,13 +36,18 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
+                <!-- <?php
                 $no = 1;
                 foreach($row->result() as $key=> $data)
                 { ?>
                 <tr>
                     <td style="width: 5%;"><?=$no++?>.</td>
-                    <td><?=$data->barcode?></td>
+                    <td>
+                        <?=$data->barcode?>
+                        <a href="<?=site_url('item/barcode_qrcode/'.$data->item_id)?>" class="btn btn-default btn-xs">
+                            Generate<i class="fa fa-barcode"></i>
+                        </a>
+                    </td>
                     <td><?=$data->name?></td>
                     <td><?=$data->category_name?></td>
                     <td><?=$data->unit_name?></td>
@@ -67,9 +73,37 @@
                 </tr>
                 <?php
                 }
-                ?>
+                ?> -->
             </tbody>
         </table>
      </div>
      </div>
  </section>
+ <script>
+        $(document).ready(function(){
+                $('#table1').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                    "url": "<?= site_url('item/get_ajax')?>",
+                    "type": "POST"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [5, 6],
+                        "classname": 'text-right'
+                    },
+                    {
+                        "targets": [7, -1],
+                        "classname": 'text-center'
+                    },
+                    {
+                        "targets": [0, 7, -1],
+                        "orderable": false
+                    }
+                ],
+                "order": []
+            })
+        })
+
+        </script>

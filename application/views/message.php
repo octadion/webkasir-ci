@@ -9,6 +9,6 @@
 <div class="alert alert-error alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-ban"></i>
-                <?=$this->session->flashdata('error')?>
+                <?=strip_tags(str_replace('</p>','', $this->session->flashdata('error')));?>
 </div>
 <?php } ?>

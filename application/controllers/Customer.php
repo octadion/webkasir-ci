@@ -11,6 +11,17 @@ class Customer extends CI_Controller {
 
 
 	}
+
+	function get_json(){
+		$this->load->library('datatables');
+		$this->datatables->add_column('no','ID-$1', 'customer_id');
+		$this->datatables->select('customer_id, name, gender, phone, address');
+		$this->datatables->add_column('action', anchor('customer/edit/$1', 'Update', array('class' => 'btn btn-primary btn-xs'))."".
+		anchor('customer/del/$1', 'Delete', array('class' => 'btn btn-danger btn-xs', 'id' => 'btn-hapus' )),'customer_id');
+		$this->datatables->from('customer');
+		return print_r($this->datatables->generate());
+	}
+
 	public function index()
 	{
 		$data['row'] = $this->customer_m->get();

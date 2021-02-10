@@ -18,10 +18,13 @@ class Supplier extends CI_Controller {
 	}
 	public function del($id){
 		$this->supplier_m->del($id);
-		if($this->db->affected_rows()>0){
-			$this->session->set_flashdata('success','Data berhasil dihapus');
+		$error = $this->db->error();
+		if($error['code'] != 0){
+			echo "<script>alert('Data tidak dapat dihapus (sudah berelasi)');</script>";
+		} else {
+			echo "<script>alert('Data berhasil dihapus');</script>";
 		}
-		redirect('supplier');
+		echo "<script>window.location='".site_url('supplier')."';</script>";
 	}
 	public function edit($id){
 		$query =$this->supplier_m->get($id);
@@ -34,7 +37,7 @@ class Supplier extends CI_Controller {
 			$this->template->load('template', 'supplier/supplier_form', $data);
 		} else {
 			echo "<script>alert('Data tidak ditemukan');";
-			echo "window.location='".site_url('supplier')."';</script>";
+			echo "<script>window.location='".site_url('supplier')."';</script>";
 		}
 	}
 	public function process(){

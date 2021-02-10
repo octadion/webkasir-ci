@@ -8,7 +8,8 @@
     </ol>
  </section>
 <section class="content">
-    <?php $this->view('message')?>
+<?php //$this->view('message')?>
+    <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div>
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Units</h3>
@@ -40,7 +41,7 @@
                     <a href="<?=site_url('unit/edit/'.$data->unit_id)?>" class="btn btn-primary btn-xs">
                             <i class="fa fa-pencil"></i> Update
                         </a>
-                        <a href="<?=site_url('unit/del/'.$data->unit_id)?>" onclick="return confirm('Yakin hapus data?')"class="btn btn-danger btn-xs">
+                        <a href="<?=site_url('unit/del/'.$data->unit_id)?>" id="btn-hapus" class="btn btn-danger btn-xs">
                             <i class="fa fa-trash"></i> Delete
                         </a>
                         

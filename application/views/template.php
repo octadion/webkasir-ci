@@ -10,19 +10,25 @@
     <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.css">
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+        .swal2-popup{
+            font-size: 1.6rem !important;
+        }
+    </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini <?=$this->uri->segment(1) == 'sale' ? 'sidebar-collapse' : null ?>">
  
     <div class="wrapper">
         <header class="main-header">
             <a href="<?=base_url('dashboard')?>" class="logo">
                 <span class="logo-mini">m<b>P</b></span>
-                <span class="logo-lg">my<b>Kafir</b></span>
+                <span class="logo-lg">my<b>Kasir</b></span>
             </a>
             <nav class="navbar navbar-static-top">
                 <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -137,15 +143,18 @@
                             <li <?=$this->uri->segment(1) == 'item' ? 'class="active"' : ''?>><a href="<?=site_url('item')?>"><i class="fa fa-circle-o"></i> Items</a></li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview <?=$this->uri->segment(1) == 'stock' || $this->uri->segment(1) == 'sale' ? 'active': ''?>">
                         <a href="#">
                             <i class="fa fa-shopping-cart"></i> <span>Transaction</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Sales</a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Stock In</a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Stock Out</a></li>
+                            <li <?=$this->uri->segment(1) == 'sale' ? 'class="active"': ''?>>
+                            <a href="<?=site_url('sale')?>"><i class="fa fa-circle-o"></i> Sales</a></li>
+                            <li <?=$this->uri->segment(1) == 'stock' && $this->uri->segment(2) == 'in' ? 'class="active"': ''?>>
+                            <a href="<?=site_url('stock/in')?>"><i class="fa fa-circle-o"></i> Stock In</a></li>
+                            <li  <?=$this->uri->segment(1) == 'stock' && $this->uri->segment(2) == 'out' ? 'class="active"': ''?>
+                            ><a href="<?=site_url('stock/out')?>"><i class="fa fa-circle-o"></i> Stock Out</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -166,7 +175,9 @@
                 </ul>
             </section>
         </aside>
- 
+        <script src="<?=base_url()?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="<?=base_url()?>assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="<?=base_url()?>assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
         <!-- Content Wrapper -->
         <div class="content-wrapper">
             <?php echo $contents ?>
@@ -181,16 +192,49 @@
  
     </div>
  
-    <script src="<?=base_url()?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+    
     <script src="<?=base_url()?>assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?=base_url()?>assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <script src="<?=base_url()?>assets/dist/js/adminlte.min.js"></script>
-    <script src="<?=base_url()?>assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="<?=base_url()?>assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+    <script src="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="<?=base_url()?>assets/dist/js/sweetalert-dev.js"></script>
     <script>
-        $(document).ready(function(){
-            $('#table1').DataTable()
+    var flash = $('#flash').data('flash');
+    if(flash){
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: flash
         })
-        </script>
+    }
+
+    $(document).on('click', '#btn-hapus', function(e){
+        e.preventDefault();
+        var link = $(this).attr('href');
+
+        Swal.fire({
+            title: 'Apa anda yakin?',
+            text: "Data akan dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = link;
+                
+            }
+        })
+    })
+    </script>
+    <script>
+  $(document).ready(function () {
+    //$('.sidebar-menu').tree()
+     $('#table1').DataTable()
+  })
+</script>
+
 </body>
 </html>

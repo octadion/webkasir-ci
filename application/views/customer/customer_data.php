@@ -8,7 +8,8 @@
     </ol>
  </section>
 <section class="content">
-<?php $this->view('message')?>
+<?php //$this->view('message')?>
+    <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div>
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Customers</h3>
@@ -20,7 +21,7 @@
      
      </div>
      <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped" id="table1">
+        <table class="table table-bordered table-striped" id="table-customer">
             <thead>
                 <tr>
                     <th>#</th>
@@ -32,32 +33,32 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-                $no = 1;
-                foreach($row->result() as $key=> $data)
-                { ?>
-                <tr>
-                    <td style="width: 5%;"><?=$no++?>.</td>
-                    <td><?=$data->name?></td>
-                    <td><?=$data->gender?></td>
-                    <td><?=$data->phone?></td>
-                    <td><?=$data->address?></td>
-                    <td class="text-center" width="160px">
-                    <a href="<?=site_url('customer/edit/'.$data->customer_id)?>" class="btn btn-primary btn-xs">
-                            <i class="fa fa-pencil"></i> Update
-                        </a>
-                        <a href="<?=site_url('customer/del/'.$data->customer_id)?>" onclick="return confirm('Yakin hapus data?')"class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash"></i> Delete
-                        </a>
-                        
-                    </td>
-                   
-                </tr>
-                <?php
-                }
-                ?>
             </tbody>
         </table>
      </div>
      </div>
  </section>
+
+ <script>
+    $("#table-customer").DataTable({
+        "processing" : true,
+        "serverSide" : true,
+        "order" : [],
+        "ajax" : {
+            "url" : "<?=site_url('customer/get_json')?>",
+            "type" : "POST"
+        },
+        "columns" : [
+            { "data" : "no", width:40},
+            { "data" : "name", width:150 },
+            { "data" : "gender", width:70 },
+            { "data" : "phone", width:120 },
+            { "data" : "address", width:150 },
+            { "data" : "action", width:100 },
+        ],
+        "columnDefs" : [
+            { "target" : [0, 5], "orderable": false },
+            { "target" : [2, -1], "className": "text-center" }
+        ]
+    })
+ </script>

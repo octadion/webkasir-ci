@@ -30,4 +30,11 @@ Class Fungsi {
         $this->ci->load->model('user_m');
         return $this->ci->user_m->get()->num_rows();
     }
+    function PdfGenerator($html, $filename, $paper, $orientation){
+        $dompdf = new Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper($paper,$orientation);
+        $dompdf->render();
+        $dompdf->stream($filename, array('Attachment'=>0));
+    }
 }

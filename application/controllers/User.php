@@ -46,8 +46,8 @@ class User extends CI_Controller {
 		}
 	
 	}
-	public function del(){
-		$id = $this->input->post('user_id');
+	public function del($id){
+		// $id = $this->input->post('user_id');
 		$this->user_m->del($id);
 		if($this->db->affected_rows()>0){
 			$this->session->set_flashdata('success','Data berhasil dihapus');
