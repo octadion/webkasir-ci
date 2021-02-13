@@ -64,10 +64,11 @@
                             </td>
                             <td>
                                 <div class="form-group input-group">
-                                    <input type="hidden" name="" id="item_id">
-                                    <input type="hidden" id="price">
-                                    <input type="hidden" id="stock">
-                                    <input type="text" id="barcode" class="form-control" autofocus>
+                                    <input type="hidden" name="item_id" id="item_id">
+                                    <input type="hidden" name="price" id="price">
+                                    <input type="hidden" name="stock" id="stock">
+                                    <input type="hidden" name="item_name" id="item_name">
+                                    <input type="text" name="barcode" id="barcode" class="form-control" autofocus>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-item">
                                             <i class="fa fa-search"></i>
@@ -115,7 +116,7 @@
         <div class="col-lg-12">
             <div class="box box-widget">
                 <div class="box-body table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" id="table2">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -149,7 +150,7 @@
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <input type="number" id="sub_total" value="" class="form-control" readonly>
+                                    <input type="text" id="sub_total" value="" class="form-control" readonly>
                                 </div>
                             </td>
                         </tr>
@@ -237,3 +238,122 @@
     </div>
 
  </section>
+
+ <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Select Product Item</h4>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Barcode</th>
+                            <th>Name</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($item as $i => $data){?>
+                        <tr>
+                            <td><?=$data->barcode?></td>
+                            <td><?=$data->name?></td>
+                            <td><?=$data->unit_name?></td>
+                            <td class="text-right"><?=indo_currency($data->price)?></td>
+                            <td class="text-right"><?=$data->stock?></td>
+                            <td class="text-right">
+                                <button class="btn btn-xs btn-info" id="select"
+                                data-id="<?=$data->item_id?>"
+                                data-barcode="<?=$data->barcode?>"
+                                data-name="<?=$data->name?>"
+                                data-price="<?=$data->price?>" >
+                                    <i class="fa fa-check"></i> Select
+                                </button>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ </div>
+
+<script>
+$(document).ready(function () {
+    var sub_total = 0;
+    var item_id_value = null;
+    var barcode_value = null;
+    var item_name_value = null;
+    var price_value =  null;
+
+    $(document).on('click','#select',function(){
+        item_id_value = $(this).data('id');
+        barcode_value = $(this).data('barcode');
+        item_name_value = $(this).data('name');
+        price_value =  $(this).data('price');
+        $('#item_id').val(item_id_value);
+        $('#price').val(price_value);
+        $('#barcode').val(barcode_value);
+        $('#item_name').val(item_name_value);
+        $('#modal-item').modal('hide');
+        console.log(barcode_value);
+     })
+     $(document).on('click','#add_chart',function(){
+        var tbodyRef = document.getElementById('table2').getElementsByTagName('tbody')[0];
+
+        // Insert a row at the end of table
+        var newRow = tbodyRef.insertRow();
+
+        // Insert a cell at the end of the row
+        var no = newRow.insertCell();
+        var barcode = newRow.insertCell();
+        var item_name = newRow.insertCell();
+        var price = newRow.insertCell();
+        var qty = newRow.insertCell();
+        var discount = newRow.insertCell();
+        var total = newRow.insertCell();
+        var action = newRow.insertCell();
+
+        // hitung total
+        var total_count = document.getElementById('price').value * document.getElementById('qty').value;
+
+        // Append a text node to the cell
+        var no_value = document.createTextNode('1234');
+        barcode_value = document.createTextNode(barcode_value);
+        item_name_value = document.createTextNode(item_name_value);
+        price_value =  document.createTextNode(price_value);
+        qty_value =  document.createTextNode(document.getElementById('qty').value);
+        var discount_value = document.createTextNode('0');
+        var total_value = document.createTextNode(total_count);
+        var action_value = document.createTextNode('1234');
+
+        no.appendChild(no_value);
+        barcode.appendChild(barcode_value);
+        item_name.appendChild(item_name_value);
+        price.appendChild(price_value);
+        qty.appendChild(qty_value);
+        discount.appendChild(discount_value);
+        total.appendChild(total_value);
+        action.appendChild(action_value);
+
+
+        //sub total
+        sub_total += parseInt(total_count);
+        $('#sub_total').val(sub_total);
+
+        console.log(sub_total);
+
+        //grand total
+        
+        
+     })
+  })
+</script>

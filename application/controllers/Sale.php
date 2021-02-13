@@ -8,6 +8,7 @@ class Sale extends CI_Controller {
         parent::__construct();
 		check_not_login();
         $this->load->model('sale_m');
+		$this->load->model('item_m');
     }
 
 
@@ -15,8 +16,11 @@ class Sale extends CI_Controller {
 	{
 		$this->load->model('customer_m');
 		$customer = $this->customer_m->get()->result();
+		$item =$this->item_m->get()->result();
+        // $supplier =$this->supplier_m->get()->result();
 		$data = array(
 				'customer' => $customer,
+				'item' => $item,
 				'invoice' => $this->sale_m->invoice_no(),
 
 		);

@@ -24,35 +24,34 @@
         <table class="table table-bordered table-striped" id="table1">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th width="5%">#</th>
                     <th>Name</th>
-                    <th>Actions</th>
+                    <th width="160px">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php
-                $no = 1;
-                foreach($row->result() as $key=> $data)
-                { ?>
-                <tr>
-                    <td style="width: 5%;"><?=$no++?>.</td>
-                    <td><?=$data->name?></td>
-                    <td class="text-center" width="160px">
-                    <a href="<?=site_url('category/edit/'.$data->category_id)?>" class="btn btn-primary btn-xs">
-                            <i class="fa fa-pencil"></i> Update
-                        </a>
-                        <a href="<?=site_url('category/del/'.$data->category_id)?>" id="btn-hapus"class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash"></i> Delete
-                        </a>
-                        
-                    </td>
-                   
-                </tr>
-                <?php
-                }
-                ?>
             </tbody>
         </table>
      </div>
      </div>
  </section>
+
+ <script>
+        $(document).ready(function(){
+                $('#table1').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                    "url": "<?= site_url('category/get_ajax')?>",
+                    "type": "POST"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0, -1],
+                        "orderable": false
+                    }
+                ],
+                "order": []
+            })
+        })
+ </script>
