@@ -199,6 +199,9 @@
 
     <script src="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?=base_url()?>assets/dist/js/sweetalert-dev.js"></script>
+
+    <script src="<?=base_url()?>assets/dist/js/jqBootstrapValidation.js"></script>
+    
     <script>
     var flash = $('#flash').data('flash');
     if(flash){

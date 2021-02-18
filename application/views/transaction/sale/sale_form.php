@@ -192,16 +192,18 @@
                                 </div>
                             </td>
                         </tr>
+                            <div id="change_div">
                         <tr>
-                            <td style="vertical-align: top">
-                                <label for="change">Change</label>
-                            </td>
-                            <td>
-                                <div>
-                                    <input type="text" id="change" class="form-control" readonly>
-                                </div>
-                            </td>
+                                <td style="vertical-align: top">
+                                    <label for="change">Change</label>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input type="text" id="change" class="form-control" readonly>
+                                    </div>
+                                </td>
                         </tr>
+                            </div>
                     </table>
                 </div>
             </div>
@@ -288,8 +290,8 @@
 <script>
 
 // don't touch me
-var row_value = {};
-var no_value  = 0;
+var row_value = {}; // temporary
+var no_value  = 0; 
 var rows      = [];
 var receipt   = {
     sub_total     : 0,
@@ -298,12 +300,6 @@ var receipt   = {
     cash          : 0,
     change        : 0,
 };
-
-var sub_total      = 0;
-var discount_total = 0;
-var grand_total    = 0;
-var cash           = 0;
-var change         = 0;
 
 function grandTotal_subTotal_refresh(){
     receipt.sub_total   = parseInt(document.getElementById('sub_total').value);
@@ -379,11 +375,6 @@ $(document).ready(function () {
 
             // input row
 
-            // if(already_in == false){
-            //     no_value++;
-            //     rows.push()
-            // }
-
             if(already_in == false){
                 no_value++;
                 rows.push(row_value);
@@ -425,6 +416,7 @@ $(document).ready(function () {
      $("#cash").on('keyup keypress change' ,function() {
         receipt.cash = isNaN(parseInt(document.getElementById('cash').value)) ? 0 : parseInt(document.getElementById('cash').value);
         receipt.change = receipt.cash - receipt.grand_total;
+        // receipt.change < 0 ? $('#change_div').addClass("has-error") : $('#change_div').removeClass("has-error");
         $('#change').val(receipt.change);
      });
 
@@ -443,7 +435,6 @@ $(document).ready(function () {
             $('#table2 tbody tr:eq('+i+') td:eq(0)').text(i+1);
             if( rows[i].barcode_value === row_barcode ) {
                 rows.splice(i,1);
-                console.log('DELETE ROWWWWWWW');
                 // break;
             }
         }
@@ -452,7 +443,22 @@ $(document).ready(function () {
         grandTotal_subTotal_refresh();
      });
 
-     // yg belom edit button, ux delete, process payment, cancel button
+     $(document).on('click','#process_payment',function(){
+        if(receipt.cash < receipt.grand_total){
+            alert('duit kurang');
+        }
+        else{
+            receipt.invoice = <?php echo json_encode($invoice); ?>;
+            receipt.customer_id = document.getElementById("customer").value;
+            receipt.note = document.getElementById("note").value;
+            receipt.cart = rows;
+            receipt.date = document.getElementById("date").value;
+            console.log(receipt);
+        }
+
+     }); 
+
+     // yg belom edit button, ux delete/change, process payment, cancel button,
 
   })
 </script>
