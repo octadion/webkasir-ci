@@ -68,7 +68,7 @@
                                     <input type="hidden" name="price" id="price">
                                     <input type="hidden" name="stock" id="stock">
                                     <input type="hidden" name="item_name" id="item_name">
-                                    <input type="text" name="barcode" id="barcode" class="form-control" autofocus>
+                                    <input type="text" name="barcode" id="barcode" class="form-control" data-toggle="modal" data-target="#modal-item" autocomplete="off" required autofocus>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-item">
                                             <i class="fa fa-search"></i>
@@ -91,7 +91,7 @@
                             <td></td>
                             <td>
                                 <div>
-                                    <button type="button" id="add_chart" class="btn btn-primary">
+                                    <button type="submit" id="add_chart" class="btn btn-primary">
                                         <i class="fa fa-cart-plus"></i> Add
                                     </button>
                                 </div>
@@ -126,10 +126,10 @@
                                 <th>Qty</th>
                                 <th width="10%">Discount Item</th>
                                 <th width="15%">Total</th>
-                                <th>Actions</th>
+                                <th width="10%">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="cart_table">
+                        <tbody class="cart_table" id="cart_table">
                             <tr>
                                 <td colspan="9" class="text-center">Tidak ada item</td>
                             </tr>
@@ -170,7 +170,7 @@
                            </td> 
                            <td>
                                 <div class="form-group">
-                                    <input type="number" id="grand_total" class="form-control" readonly>
+                                    <input type="text" id="grand_total" class="form-control" readonly>
                                 </div>
                            </td>
                         </tr>
@@ -198,7 +198,7 @@
                             </td>
                             <td>
                                 <div>
-                                    <input type="number" id="change" class="form-control" readonly>
+                                    <input type="text" id="change" class="form-control" readonly>
                                 </div>
                             </td>
                         </tr>
@@ -226,7 +226,7 @@
         </div>
         <div class="col-lg-3">
             <div>
-                <button id="cancel_payment" class="btn btn-flat btn-warning">
+                <button type="reset" id="cancel_payment" class="btn btn-flat btn-warning">
                     <i class="fa fa-refresh"></i> Cancel
                 </button><br><br>
                 <button id="process_payment" class="btn btn-flat btn-lg btn-success">
@@ -234,7 +234,6 @@
                 </button>
             </div>
         </div>
-
     </div>
 
  </section>
@@ -287,73 +286,173 @@
  </div>
 
 <script>
+
+// don't touch me
+var row_value = {};
+var no_value  = 0;
+var rows      = [];
+var receipt   = {
+    sub_total     : 0,
+    discount_total: 0,
+    grand_total   : 0,
+    cash          : 0,
+    change        : 0,
+};
+
+var sub_total      = 0;
+var discount_total = 0;
+var grand_total    = 0;
+var cash           = 0;
+var change         = 0;
+
+function grandTotal_subTotal_refresh(){
+    receipt.sub_total   = parseInt(document.getElementById('sub_total').value);
+    receipt.grand_total = receipt.sub_total - receipt.discount_total;
+    tampil_grand_total  = (isNaN(receipt.grand_total) ? 0 : receipt.grand_total);
+
+    receipt.grand_total < 0 ? $('#grand_total2').addClass("text-danger") : $('#grand_total2').removeClass("text-danger");
+    $('#grand_total').val(tampil_grand_total);
+    $('#grand_total2').text(tampil_grand_total);
+}
+
+function checkFirstRow(){
+    // delete first row template if empty
+    if(no_value == 0){
+        var table = document.querySelectorAll('tbody.cart_table tr');
+        if(typeof(table[0]) !== 'undefined'){ //kalo row 0 belom ada berarti gausah diremove
+            table[0].remove();
+        }
+    }
+}
+
 $(document).ready(function () {
-    var sub_total = 0;
-    var item_id_value = null;
-    var barcode_value = null;
-    var item_name_value = null;
-    var price_value =  null;
-
     $(document).on('click','#select',function(){
-        item_id_value = $(this).data('id');
-        barcode_value = $(this).data('barcode');
-        item_name_value = $(this).data('name');
-        price_value =  $(this).data('price');
-        $('#item_id').val(item_id_value);
-        $('#price').val(price_value);
-        $('#barcode').val(barcode_value);
-        $('#item_name').val(item_name_value);
+        row_value = {
+            item_id_value  : $(this).data('id'),
+            barcode_value  : $(this).data('barcode'),
+            item_name_value: $(this).data('name'),
+            price_value    : $(this).data('price'),
+        }
+        
+        $('#item_id').val(row_value.item_id_value);
+        $('#barcode').val(row_value.barcode_value);
         $('#modal-item').modal('hide');
-        console.log(barcode_value);
      })
+
      $(document).on('click','#add_chart',function(){
-        var tbodyRef = document.getElementById('table2').getElementsByTagName('tbody')[0];
+        if($('#barcode').val()){
 
-        // Insert a row at the end of table
-        var newRow = tbodyRef.insertRow();
+            // action update delete
 
-        // Insert a cell at the end of the row
-        var no = newRow.insertCell();
-        var barcode = newRow.insertCell();
-        var item_name = newRow.insertCell();
-        var price = newRow.insertCell();
-        var qty = newRow.insertCell();
-        var discount = newRow.insertCell();
-        var total = newRow.insertCell();
-        var action = newRow.insertCell();
+            row_value.qty_value      = parseInt(document.getElementById('qty').value);
+            row_value.discount_value = 0; // belom
+            row_value.total_value    = parseInt(row_value.price_value) * parseInt(row_value.qty_value);
+            // row_value.action_value   = action_value_html;
 
-        // hitung total
-        var total_count = document.getElementById('price').value * document.getElementById('qty').value;
+            // get table
+            var tbodyRef = document.getElementById('table2').getElementsByTagName('tbody')[0];
+            
+            // delete first row template if empty
+            checkFirstRow()
 
-        // Append a text node to the cell
-        var no_value = document.createTextNode('1234');
-        barcode_value = document.createTextNode(barcode_value);
-        item_name_value = document.createTextNode(item_name_value);
-        price_value =  document.createTextNode(price_value);
-        qty_value =  document.createTextNode(document.getElementById('qty').value);
-        var discount_value = document.createTextNode('0');
-        var total_value = document.createTextNode(total_count);
-        var action_value = document.createTextNode('1234');
+            // check if item already in
+            var tbodyRowCount = document.getElementById("table2").tBodies[0].rows.length;
+            var qty_after     = 0;
+            var already_in    = false;
+            for (i = 0; i < tbodyRowCount; i++) { 
+                 var bc = $('#table2 tbody tr:eq('+i+') td:eq(1)').text();
+                 if(row_value.barcode_value == bc && rows[i].barcode_value == bc){
+                    already_in  = true;
+                    qty_before  = parseInt($('#table2 tbody tr:eq('+i+') td:eq(4)').text());
+                    qty_after   = qty_before + parseInt(row_value.qty_value);
+                    total_after = qty_after * parseInt(row_value.price_value);
+                    rows[i].qty_value = qty_after;
+                    rows[i].total_value = total_after;
+                    $('#table2 tbody tr:eq('+i+') td:eq(4)').text(qty_after);
+                    $('#table2 tbody tr:eq('+i+') td:eq(6)').text(total_after);
+                    break;
+                 }
+            }
 
-        no.appendChild(no_value);
-        barcode.appendChild(barcode_value);
-        item_name.appendChild(item_name_value);
-        price.appendChild(price_value);
-        qty.appendChild(qty_value);
-        discount.appendChild(discount_value);
-        total.appendChild(total_value);
-        action.appendChild(action_value);
+            // hitung total
+            var total_count = row_value.price_value * document.getElementById('qty').value;
 
+            // input row
 
-        //sub total
-        sub_total += parseInt(total_count);
-        $('#sub_total').val(sub_total);
+            // if(already_in == false){
+            //     no_value++;
+            //     rows.push()
+            // }
 
-        console.log(sub_total);
+            if(already_in == false){
+                no_value++;
+                rows.push(row_value);
+                $('#table2 > tbody').append('<tr class="row'+no_value+'">');
+                for(const key in row_value){
+                    if(key == 'item_id_value'){
+                        $('#table2 > tbody > tr:last').append('<td>'+no_value+'</td>');
+                        continue;
+                    }
+                    $('#table2 > tbody > tr:last').append('<td>'+row_value[key]+'</td>');
+                }
+                var action_value_html =  
+                `
+                    <button class="update_row btn btn-primary btn-xs" data-row="row`+no_value+`"><i class="fa fa-edit"></i> Edit</button>
+                    <button class="delete_row btn btn-danger btn-xs" data-row="row`+no_value+`"><i class="fa fa-trash"></i> Hapus</button>
+                `;
+                $('#table2 > tbody > tr:last').append('<td>'+action_value_html+'</td>');
+            }
 
-        //grand total
-        
-        
+            //sub total
+            receipt.sub_total += parseInt(total_count);
+            $('#sub_total').val(receipt.sub_total);
+
+            // reset value
+            $('#barcode').val('');
+            $('#qty').val('1');
+
+            // grand total
+            grandTotal_subTotal_refresh()
+        }
      })
+
+     $("#discount").on('keyup keypress change' ,function() {
+        var edValue = document.getElementById("discount");
+        receipt.discount_total = isNaN(parseInt(edValue.value)) ? 0 : parseInt(edValue.value);
+        grandTotal_subTotal_refresh();
+     });
+
+     $("#cash").on('keyup keypress change' ,function() {
+        receipt.cash = isNaN(parseInt(document.getElementById('cash').value)) ? 0 : parseInt(document.getElementById('cash').value);
+        receipt.change = receipt.cash - receipt.grand_total;
+        $('#change').val(receipt.change);
+     });
+
+     $("#cart_table").on('click','.delete_row',function(){
+        row = $(this).data('row');
+        row_barcode = $('#table2 tbody .'+row+' td:eq(1)').text();
+
+        // subtotal - deleted data
+        receipt.sub_total -= parseInt($('#table2 tbody .'+row+' td:eq(6)').text());
+
+        // delete row
+        $(this).closest("tr").remove();
+
+        // find data in rows
+        for( var i = 0; i < rows.length; i++ ) {
+            $('#table2 tbody tr:eq('+i+') td:eq(0)').text(i+1);
+            if( rows[i].barcode_value === row_barcode ) {
+                rows.splice(i,1);
+                console.log('DELETE ROWWWWWWW');
+                // break;
+            }
+        }
+
+        $('#sub_total').val(receipt.sub_total);
+        grandTotal_subTotal_refresh();
+     });
+
+     // yg belom edit button, ux delete, process payment, cancel button
+
   })
 </script>
