@@ -37,6 +37,15 @@ class Category extends CI_Controller {
 			echo "window.location='".site_url('category')."';</script>";
 		}
 	}
+	function get_json(){
+		$this->load->library('datatables');
+		$this->datatables->add_column('no','ID-$1', 'category_id');
+		$this->datatables->select('category_id, name');
+		$this->datatables->add_column('action', anchor('category/edit/$1', 'Update', array('class' => 'btn btn-primary btn-xs'))."".
+		anchor('category/del/$1', 'Delete', array('class' => 'btn btn-danger btn-xs', 'id' => 'btn-hapus' )),'category_id');
+		$this->datatables->from('p_category');
+		return print_r($this->datatables->generate());
+	}
 	public function process(){
 		$post = $this->input->post(null, TRUE);
 		if(isset($_POST['add'])){

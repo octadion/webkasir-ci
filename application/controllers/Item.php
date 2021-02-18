@@ -25,7 +25,9 @@ class Item extends CI_Controller {
             $row[] = $item->unit_name;
             $row[] = indo_currency($item->price);
             $row[] = $item->stock;
-            $row[] = $item->image != null ? '<img src="'.base_url('uploads/product/'.$item->image).'" class="img" style="width:100px">' : null;
+            $row[] = '<a href="'.site_url('item/detail_gambar/'.$item->item_id).'" class="btn btn-default btn-xs"><i class="fa fa-eye"></i> Detail</a>';
+			
+			//$item->image != null ? '<img src="'.base_url('uploads/product/'.$item->image).'" class="img" style="width:100px">' : null;
             // add html for action
             $row[] = '<a href="'.site_url('item/edit/'.$item->item_id).'" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Update</a>
                     <a href="'.site_url('item/del/'.$item->item_id).'" id="btn-hapus"  class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a>';
@@ -40,6 +42,10 @@ class Item extends CI_Controller {
         // output to json format
         echo json_encode($output);
     }
+	public function detail($id){
+		$item=$this->item_m->get($id)->row();
+		$item->image != null ? '<img src="'.base_url('uploads/product/'.$item->image).'" class="img" style="width:100px">' : '<img src="'.base_url('uploads/product/notfound.jpg').'" class="img" style="width:100px">';
+	}
 	public function index()
 	{
 		$data['row'] = $this->item_m->get();
@@ -183,6 +189,10 @@ class Item extends CI_Controller {
 			'unit' => $unit, 'selectedunit' => null,
 		);
 		$this->template->load('template', 'product/item/item_form', $data);
+	}
+	function detail_gambar($id){
+		$data['row'] = $this->item_m->get($id)->row();
+		$this->template->load('template', 'product/item/image', $data);
 	}
 	function barcode_qrcode($id){
 		$data['row'] = $this->item_m->get($id)->row();

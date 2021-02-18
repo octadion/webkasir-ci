@@ -16,13 +16,22 @@ class Supplier extends CI_Controller {
 		$data['row'] = $this->supplier_m->get();
 		$this->template->load('template', 'supplier/supplier_data', $data);
 	}
+	function get_json(){
+		$this->load->library('datatables');
+		$this->datatables->add_column('no','ID-$1', 'supplier_id');
+		$this->datatables->select('supplier_id, name, phone, address, description');
+		$this->datatables->add_column('action', anchor('supplier/edit/$1', 'Update', array('class' => 'btn btn-primary btn-xs'))."".
+		anchor('supplier/del/$1', 'Delete', array('class' => 'btn btn-danger btn-xs', 'id' => 'btn-hapus' )),'supplier_id');
+		$this->datatables->from('supplier');
+		return print_r($this->datatables->generate());
+	}
 	public function del($id){
 		$this->supplier_m->del($id);
 		$error = $this->db->error();
 		if($error['code'] != 0){
-			echo "<script>alert('Data tidak dapat dihapus (sudah berelasi)');</script>";
+			echo '<div id="flash" data-flash="'.$this->session->flashdata('success').'"></div>';
 		} else {
-			echo "<script>alert('Data berhasil dihapus');</script>";
+			echo '<div id="flash" data-flash="'.$this->session->flashdata('success').'"></div>';
 		}
 		echo "<script>window.location='".site_url('supplier')."';</script>";
 	}

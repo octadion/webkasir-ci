@@ -18,6 +18,7 @@ class Sale_m extends CI_Model {
         $invoice = "MP".date('ymd').$no;
         return $invoice;
     }
+   
 
 }
 

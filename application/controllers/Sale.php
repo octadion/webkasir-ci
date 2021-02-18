@@ -22,4 +22,8 @@ class Sale extends CI_Controller {
 		);
 		$this->template->load('template', 'transaction/sale/sale_form', $data);
 	}
+
+	
+
+	
 }

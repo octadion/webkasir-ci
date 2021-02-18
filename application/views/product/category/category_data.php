@@ -21,7 +21,7 @@
      
      </div>
      <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped" id="table1">
+        <table class="table table-bordered table-striped" id="table-category">
             <thead>
                 <tr>
                     <th>#</th>
@@ -56,3 +56,23 @@
      </div>
      </div>
  </section>
+ <script>
+    $("#table-category").DataTable({
+        "processing" : true,
+        "serverSide" : true,
+        "order" : [],
+        "ajax" : {
+            "url" : "<?=site_url('category/get_json')?>",
+            "type" : "POST"
+        },
+        "columns" : [
+            { "data" : "no", width:40},
+            { "data" : "name", width:150 },
+            { "data" : "action", width:50 },
+        ],
+        "columnDefs" : [
+            { "target" : [0, 5], "orderable": false },
+            { "target" : [2, -1], "className": "text-center" }
+        ]
+    })
+ </script>

@@ -21,7 +21,7 @@
      
      </div>
      <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped" id="table1">
+        <table class="table table-bordered table-striped" id="table-unit">
             <thead>
                 <tr>
                     <th>#</th>
@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
+                <!-- <?php
                 $no = 1;
                 foreach($row->result() as $key=> $data)
                 { ?>
@@ -50,9 +50,29 @@
                 </tr>
                 <?php
                 }
-                ?>
+                ?> -->
             </tbody>
         </table>
      </div>
      </div>
  </section>
+ <script>
+    $("#table-unit").DataTable({
+        "processing" : true,
+        "serverSide" : true,
+        "order" : [],
+        "ajax" : {
+            "url" : "<?=site_url('unit/get_json')?>",
+            "type" : "POST"
+        },
+        "columns" : [
+            { "data" : "no", width:40},
+            { "data" : "name", width:150 },
+            { "data" : "action", width:50 },
+        ],
+        "columnDefs" : [
+            { "target" : [0, 5], "orderable": false },
+            { "target" : [2, -1], "className": "text-center" }
+        ]
+    })
+ </script>

@@ -50,6 +50,15 @@ class Unit extends CI_Controller {
 		}
 		redirect('unit');
 	}
+	function get_json(){
+		$this->load->library('datatables');
+		$this->datatables->add_column('no','ID-$1', 'unit_id');
+		$this->datatables->select('unit_id, name');
+		$this->datatables->add_column('action', anchor('unit/edit/$1', 'Update', array('class' => 'btn btn-primary btn-xs'))."".
+		anchor('unit/del/$1', 'Delete', array('class' => 'btn btn-danger btn-xs', 'id' => 'btn-hapus' )),'unit_id');
+		$this->datatables->from('p_unit');
+		return print_r($this->datatables->generate());
+	}
 	public function add(){
 		$unit = new stdClass();
 		$unit->unit_id = null;

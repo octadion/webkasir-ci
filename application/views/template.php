@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/Ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.css">
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -157,13 +158,14 @@
                             ><a href="<?=site_url('stock/out')?>"><i class="fa fa-circle-o"></i> Stock Out</a></li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview <?=$this->uri->segment(1) == 'report' ? 'active' : '' ?>">
                         <a href="#">
                             <i class="fa fa-pie-chart"></i> <span>Reports</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Sales</a></li>
+                            <li <?=$this->uri->segment(1) == 'report' ? 'class="active"': ''?>>
+                            <a href="<?=site_url('report/sale')?>"><i class="fa fa-circle-o"></i> Sales</a></li>
                             <li><a href="#"><i class="fa fa-circle-o"></i> Stocks</a></li>
                         </ul>
                     </li>
@@ -187,11 +189,14 @@
             <div class="pull-right hidden-xs">
                 <b>Version</b> 1.0
             </div>
-            <strong>Copyright &copy; 2019 <a href="https://yukcoding.id">Phicos</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2019 <a href="">Phicos</a>.</strong> All rights reserved.
         </footer>
  
     </div>
- 
+    <script src="<?=base_url()?>assets/highcharts/highcharts.js"></script>
+    <script src="<?=base_url()?>assets/highcharts/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
     <script src="<?=base_url()?>assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?=base_url()?>assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
@@ -234,6 +239,56 @@
     //$('.sidebar-menu').tree()
      $('#table1').DataTable()
   })
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+    var options = {
+        chart: {
+            renderTo: 'item',
+            type: 'line',
+            marginRight: 130,
+            marginBottom: 25
+        },
+        title: {
+            text: 'Project Requests',
+            x: -20 //center
+        },
+        subtitle: {
+            text: '',
+            x: -20
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            title: {
+                text: 'stock'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b>'+
+                    this.x +': '+ this.y;
+            }
+        },
+
+
+        series: []
+    }
+
+
+    $.getJSON("<?php echo site_url('dashboard/data');?>", function(json) {            
+        options.xAxis.categories = json[0]['data'];
+        options.series[0] = json[1];
+        chart = new Highcharts.Chart(options);
+    });
+    });
 </script>
 
 </body>
