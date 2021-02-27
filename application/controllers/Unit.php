@@ -37,6 +37,16 @@ class Unit extends CI_Controller {
 			echo "window.location='".site_url('unit')."';</script>";
 		}
 	}
+	public function process_add(){
+		$post = $this->input->post(null, TRUE);
+			$this->unit_m->add($post);
+	 
+		if($this->db->affected_rows()>0){
+			$this->session->set_flashdata('success','Data berhasil disimpan');
+	
+		}
+		redirect('unit');
+	}
 	public function process(){
 		$post = $this->input->post(null, TRUE);
 		if(isset($_POST['add'])){

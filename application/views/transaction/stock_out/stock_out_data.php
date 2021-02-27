@@ -14,11 +14,20 @@
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Stock Out</h3>
-     <div class="pull-right">
-        <a href="<?=site_url('stock/out/add')?>" class="btn btn-primary btn-flat">
-        <i class="fa fa-plus"></i> Add Stock Out
+     <br>
+     <br>
+     <div class="">
+        <a href="<?=site_url('stock/out/add')?>" class="btn btn-success">
+        <i class="fa fa-plus"></i> Create
+        </a>
+        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
+        <i class="fa fa-refresh"></i> Refresh
         </a>
      </div>
+     <div class="">
+       
+     </div>
+     <br>
      
      </div>
      <div class="box-body table-responsive">

@@ -13,11 +13,23 @@
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Customers</h3>
-     <div class="pull-right">
-        <a href="<?=site_url('customer/add')?>" class="btn btn-primary btn-flat">
+     <br>
+     <br>
+     <div class="">
+        <a href="" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-plus"></i> Create
         </a>
+        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <i class="fa fa-upload"></i> Import
+        </a>
+        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
+        <i class="fa fa-refresh"></i> Refresh
+        </a>
      </div>
+     <div class="">
+       
+     </div>
+     <br>
      
      </div>
      <div class="box-body table-responsive">
@@ -38,7 +50,49 @@
      </div>
      </div>
  </section>
-
+ <div class="modal fade" id="modal-create">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Create Customer</h4>
+            </div>
+            <div class="modal-body">
+            <form action="<?=site_url('customer/process_add')?>" method="post">
+                    <div class="form-group">
+                        <label>Customer Name *</label>
+                        <input type="hidden" name="id">
+                        <input type="text" name="customer_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" class="form-control" required>
+                            <option value="">- Pilih -</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="number" name="phone" value="" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea name="addr" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="" class="btn btn-success btn-flat">
+                            <i class="fa fa-paper-plane"></i>  Save
+                        </button>
+                        <button type="reset" class="btn btn-flat">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+ </div>
  <script>
     $("#table-customer").DataTable({
         "processing" : true,
@@ -62,3 +116,18 @@
         ]
     })
  </script>
+ <script>
+ $(document).ready(function () {
+     $(document).on('click','#modal-create',function(){
+        var customername= $(this).data('customername');
+        var gender = $(this).data('gender');
+        var address = $(this).data('address');
+        var phone = $(this).data('phone');
+        $('#customer_name').text(customername);
+        $('#phone').text(phone);
+        $('#addr').text(address);
+        $('#gender').text(gender);
+      
+    })
+  })
+</script>

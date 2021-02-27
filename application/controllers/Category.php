@@ -69,4 +69,14 @@ class Category extends CI_Controller {
 		);
 		$this->template->load('template', 'product/category/category_form', $data);
 	}
+	public function process_add(){
+		$post = $this->input->post(null, TRUE);
+			$this->category_m->add($post);
+		
+		if($this->db->affected_rows()>0){
+			$this->session->set_flashdata('success','Data berhasil disimpan');
+	
+		}
+		redirect('category');
+	}
 }

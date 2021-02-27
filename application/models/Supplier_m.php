@@ -27,6 +27,7 @@ class Supplier_m extends CI_Model {
         $this->db->insert('supplier', $params);
     }
     public function edit($post){
+      
       $params = [
         'name' => $post['supplier_name'],
         'phone' => $post['phone'],

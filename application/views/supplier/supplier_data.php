@@ -9,16 +9,27 @@
  </section>
 <section class="content">
 <?php //$this->view('message')?>
-<div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div>
+<!-- <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div> -->
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Suppliers</h3>
-     <div class="pull-right">
-        <a href="<?=site_url('supplier/add')?>" class="btn btn-primary btn-flat">
+     <br>
+     <br>
+     <div class="">
+        <a href="" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-plus"></i> Create
         </a>
+        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <i class="fa fa-upload"></i> Import
+        </a>
+        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
+        <i class="fa fa-refresh"></i> Refresh
+        </a>
      </div>
-     
+     <div class="">
+       
+     </div>
+     <br>
      </div>
      <div class="box-body table-responsive">
         <table class="table table-bordered table-striped" id="table-supplier">
@@ -40,24 +51,88 @@
      </div>
      </div>
  </section>
- <!-- <div class="modal fade" id="modalDelete">
-    <div class="modal-dialog modal-sm">
+ <div class="modal fade" id="modal-create">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Yakin akan menghapus data ini?</h4>
+                <h4 class="modal-title">Supplier</h4>
             </div>
-            <div class="modal-footer">
-            <form id="formDelete" action="" method="post">
-                <button class="btn btn-default" data-dismiss="modal">Tidak</button>
-                <button class="btn btn-danger" type="submit">Hapus</button>
+            <div class="modal-body">
+            <form action="<?=base_url(('supplier/process_add'))?>" id="form_supplier" method="post">
+            <div class="form-group">
+                        <label>Supplier Name *</label>
+                        <input type="hidden" name="id" >
+                        <input type="text" name="supplier_name" id="name"   class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="number" name="phone" id="phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea name="addr" class="form-control" id="address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="desc" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="" class="btn btn-success btn-flat">
+                            <i class="fa fa-paper-plane"></i>  Save
+                        </button>
+                        <button type="reset" class="btn btn-flat">Reset</button>
+                        
+                    </div>
+
             </form>
             </div>
         </div>
     </div>
- </div> -->
+ </div>
+ <div class="modal fade" id="modal-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Supplier</h4>
+            </div>
+            <div class="modal-body">
+            <form action="<?=site_url('supplier/edit')?>"  method="post">
+            <div class="form-group">
+                        <label>Supplier Name *</label>
+                        <input type="hidden" name="id" >
+                        <input type="text" name="supplier_name" id="name"   class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="number" name="phone" id="phone"  class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea name="addr" class="form-control" id="address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="desc" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="" class="btn btn-success btn-flat">
+                            <i class="fa fa-paper-plane"></i>  Save
+                        </button>
+                        <button type="reset" class="btn btn-flat">Reset</button>
+                        
+                    </div>
+
+            </form>
+            </div>
+        </div>
+    </div>
+ </div>
  <script>
     $("#table-supplier").DataTable({
         "processing" : true,
@@ -81,3 +156,34 @@
         ]
     })
  </script>
+ <script>
+$(function() {
+        $("#form_supplier input, #form_supplier textarea").jqBootstrapValidation({
+
+            preventSubmit: false,
+            submitSuccess: function(form, event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "<?= base_url('supplier/process_add'); ?>",
+                    type: 'POST',
+                    data: new FormData($('#form_supplier')[0]),
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        // $(modalId).modal('hide');
+                        // getEmployee();
+                        Swal.fire(
+                            res.title,
+                            res.message,
+                            res.status
+                        );
+                    }
+                });
+            },
+            submitError: function(form, event, errors) {
+                event.preventDefault();
+            }
+        });
+    });
+
+</script>

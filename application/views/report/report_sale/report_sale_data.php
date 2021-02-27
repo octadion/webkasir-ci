@@ -15,7 +15,7 @@
     </div>
             <div class="box box-widget">
                 <div class="box-body">
-                    <form action="" method="post">
+                    <form action="" method="get" id="formsearch">
                     <table width="100%">
                         <tr>
                             <td>
@@ -26,7 +26,7 @@
                             <td>
                                 <div class="form-group input-group">
                     
-                                    <input type="date" name="from"class="form-control" id="" autofocus value="">
+                                    <input type="date" name="from"class="form-control" id="from" autofocus value="">
                                    
                                 </div>
                             </td>
@@ -37,7 +37,7 @@
                             </td>
                             <td>
                                 <div class="form-group input-group">
-                                <input type="date" id="sd" name="to" autofocus class="form-control"value="">
+                                <input type="date" id="to" name="to" autofocus class="form-control"value="">
                                 </div>
                             </td>
                             <td>
@@ -47,7 +47,7 @@
                             </td>
                             <td>
                             <div class="form-group input-group">
-                                <select name="customer_name" class="form-control" >
+                                <select name="customer_name" id="customer_name" class="form-control" >
                                 <option value="">- Pilih -</option>
                                     <?php foreach($row as $key => $data) {?>
                                             <option value="<?=$data->customer_name?>"><?=$data->customer_name?></option>
@@ -62,7 +62,8 @@
                             </td>
                             <td>
                                 <div class="form-group input-group">
-                                <input type="text"name="invoice" id="" autofocus class="form-control">
+                                <input type="text"name="invoice" id="invoice" autofocus class="form-control">
+                                <!-- <input type="hidden" name="filter" value="true"> -->
                                 </div>
                             </td>
                         </tr>
@@ -76,10 +77,10 @@
                             <td></td>
                             <td style="right:10;">
                             <div>
-                            <button type="reset" id="" class="btn btn-flat btn-lg-4 btn-default">
+                            <button type="reset" id="reset" class="btn btn-flat btn-lg-4 btn-default">
                                     <i class="fa fa-remove"></i> Reset
                                 </button>
-                            <button type="submit"id="" class="btn btn-flat btn-lg-4 btn-info">
+                            <button type="submit"id="" valiue="submit" class="btn btn-flat btn-lg-4 btn-info">
                                     <i class="fa fa-search"></i> Filter
                                 </button>
                                 <a href="<?=site_url('report/sale')?>" class="btn btn-lg-4 btn-warning btn-flat">
@@ -99,11 +100,13 @@
  <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Penjualan</h3>
-
-     
+        <div style="text-align: right;">
+        <a href="<?=base_url('report/export_excel')?>" class="btn btn-default"><i class="fa fa-print"> Export</i></a>
+     <a href="<?=base_url('report/print_laporan')?>" id="print" class="btn btn-danger"><i class="fa fa-print">  Print</i></a>
+        </div>
      </div>
      <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped" id="table-reportsale">
+        <table class="table table-bordered table-striped" id="filter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -118,11 +121,8 @@
                
             </thead>
             <tbody>
-                 <?php
-                $no = 1;
-                foreach($row as $key=> $data)
-                { ?>
-                <tr>
+            <?php $no = 1;foreach($row as $key=> $data){ ?>
+            <tr>
                     <td style="width: 5%;"><?=$no++?>.</td>
                     <td><?=$data->invoice?></td>
                     <td><?=$data->date?></td>
@@ -151,13 +151,12 @@
                     </td>
                    
                 </tr>
-                <?php
-                }
-                ?>
+                <?php } ?>
             </tbody>
         </table>
      </div>
      </div>
+    
  </section>
  <div class="modal fade" id="modal-detail">
     <div class="modal-dialog modal-sm">
@@ -173,7 +172,7 @@
                     <tbody>
                         <tr>
                             <th style="width: 35%">Invoice</th>
-                            <td><span id="invoice"></span></td>
+                            <td><span id="invoice2"></span></td>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -181,7 +180,7 @@
                         </tr>
                         <tr>
                             <th>Customer</th>
-                            <td><span id="customer_name"></span></td>
+                            <td><span id="customer_name2"></span></td>
                         </tr>
                         <tr>
                             <th>Total</th>
@@ -216,13 +215,208 @@
         var discount = $(this).data('discount');
         var grandtotal = $(this).data('grandtotal');
         var note = $(this).data('note');
-        $('#invoice').text(invoice);
+        $('#invoice2').text(invoice);
         $('#date').text(date);
-        $('#customer_name').text(customer);
+        $('#customer_name2').text(customer);
         $('#total_price').text(total);
         $('#discount').text(discount);
         $('#final_price').text(grandtotal);
         $('#note').text(note);
     })
   })
+</script>
+<script>
+$(document).ready(function () {
+    
+    // var changedInputs = [];
+        $("#formsearch").submit(function(e){
+            e.preventDefault();
+            // let a = $(this).val();
+            // console.log(a);
+            // changedInputs.push(this.id);
+            var customer_name = $("#customer_name").val();
+            console.log(customer_name);
+            var from = $("#from").val();
+            var to = $("#to").val();
+            var invoice = $("#invoice").val();
+            if(customer_name != ''){
+                filter_customer();
+            }
+            else if(from != '' && to != ''){
+                filter_date();
+            }
+            else if(invoice != ''){
+                filter_invoice();
+            }
+
+        });
+
+    });
+    getData();
+    function getData(){
+        $.ajax({
+            type: 'POST',
+            url : '<?=base_url()."report/getData"?>',
+            dataype: JSON, 
+            success:function(data){
+                console.log(data);
+                var baris='';
+                for(var i=0;i<data.length;i++){
+                    baris += `<tr>
+                    <td style="width: 5%;"><?=$no++?>.</td>
+                    <td><?=$data->invoice?></td>
+                    <td><?=$data->date?></td>
+                    <td><?=$data->customer_name?></td>
+                    <td><?=$data->total_price?></td>
+                    <td><?=$data->discount?></td>
+                    <td><?=$data->final_price?></td>
+                    <td class="text-center" width="200px">
+                    <a id="set_dtl"class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-detail"
+                            data-invoice="<?=$data->invoice?>"
+                            data-date="<?=$data->date?>"
+                            data-customer="<?=$data->customer_name?>"
+                            data-total="<?=$data->total_price?>"
+                            data-discount="<?=$data->discount?>"
+                            data-grandtotal="<?=$data->final_price?>"
+                            data-note="<?=$data->note?>" >
+                            <i class="fa fa-eye"></i> Detail
+                        </a>
+                    <a href="<?=site_url('report/cetak_invoice/'.$data->sale_id)?>" class="btn btn-info btn-xs" target="_blank">
+                            <i class="fa fa-print"></i> Print
+                        </a>
+                        <a href="<?=site_url('unit/del/'.$data->sale_id)?>" id="btn-hapus" class="btn btn-danger btn-xs">
+                            <i class="fa fa-trash"></i> Delete
+                        </a>
+                        
+                    </td>
+                   
+                </tr>`;
+                }
+                $("#filter").DataTable({
+                    bFilter: false
+                });
+                
+            }
+        });
+    }
+    function filter_customer(){
+        var customer_name = $("#customer_name").val();
+        $.ajax({
+            url : "<?=base_url('report/filter_all')?>",
+            data: "customer_name=" + customer_name,
+            success:function(data){
+                // $("#filter tbody").html('')
+                // console.log(data);
+                $("#filter tbody").html("<code>" + data + "</code>");
+                $("#filter").DataTable();
+                
+            }
+        });
+    }
+    function filter_date(){
+        var from = $("#from").val();
+        var to = $("#to").val();
+        $.ajax({
+            url : "<?=base_url('report/filter_all')?>",
+            data: {from:from, to:to},
+            success:function(data){
+                // $("#filter tbody").html('')
+                // console.log(data);
+                $("#filter tbody").html("<code>" + data + "</code>");
+                $("#filter").DataTable();
+                
+            }
+        });
+    }
+    function filter_invoice(){
+        var invoice = $("#invoice").val();
+        $.ajax({
+            url : "<?=base_url('report/filter_all')?>",
+            data: "invoice=" + invoice,
+            success:function(data){
+                // $("#filter tbody").html('')
+                // console.log(data);
+                $("#filter tbody").html("<code>" + data + "</code>");
+                $("#filter").DataTable();
+                
+            }
+        });
+    }
+$(document).ready(function () {
+    // var changedInputs = [];
+        $("#print").click(function(e){
+           e.preventDefault();
+            // let a = $(this).val();
+            // console.log(a);
+            // changedInputs.push(this.id);
+            var customer_name = $("#customer_name").val();
+            console.log(customer_name);
+            var from = $("#from").val();
+            console.log(from);
+            var to = $("#to").val();
+            console.log(to);
+            var invoice = $("#invoice").val();
+            console.log(invoice);
+            if(customer_name != ''){
+                filter_customer();
+                print_customer();
+            }
+            else if(from != '' && to != ''){
+                filter_date();
+                print_date();
+            }
+            else if(invoice != ''){
+                filter_invoice();
+                print_invoice();
+            }
+            else {
+                print_all();
+            }
+
+        });
+
+    });
+    function print_date(){
+            var from = $("#from").val();
+            var to = $("#to").val();
+        $.ajax({
+       
+           url : "<?=base_url('report/print_laporan')?>",
+           data: {from:from, to:to},
+       });
+}
+function print_customer(){
+        var customer_name = $("#customer_name").val();
+        $.ajax({
+       
+           url : "<?=base_url('report/print_laporan')?>",
+           data: "customer_name=" + customer_name,
+       });
+}
+function print_invoice(){
+        var invoice = $("#invoice").val();
+        $.ajax({
+       
+           url : "<?=base_url('report/print_laporan')?>",
+           data: "invoice=" + invoice,
+       });
+}
+function print_all(){
+    $.ajax({
+       
+       url : "<?=base_url('report/print_laporan')?>"
+   });
+}
+$(document).ready(function () {
+        $("#reset").click(function(e){
+           e.preventDefault();
+          reset();
+
+        });
+
+    });
+
+    function reset(){
+        $("#filter").DataTable().ajax.reload();
+    }
 </script>

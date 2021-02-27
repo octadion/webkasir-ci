@@ -25,7 +25,8 @@ class Item extends CI_Controller {
             $row[] = $item->unit_name;
             $row[] = indo_currency($item->price);
             $row[] = $item->stock;
-            $row[] = '<a href="'.site_url('item/detail_gambar/'.$item->item_id).'" class="btn btn-default btn-xs"><i class="fa fa-eye"></i> Detail</a>';
+            $row[] = '<a id="detail" data-toggle="modal" data-target="#modal-detail" data-image="'.$item->image.'" src="'.base_url('uploads/product/'.$item->image).'"class="btn btn-default btn-xs">
+			<i class="fa fa-eye"></i> Detail</a>';
 			
 			//$item->image != null ? '<img src="'.base_url('uploads/product/'.$item->image).'" class="img" style="width:100px">' : null;
             // add html for action

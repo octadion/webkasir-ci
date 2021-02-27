@@ -48,13 +48,9 @@ class Customer extends CI_Controller {
 			echo "window.location='".site_url('customer')."';</script>";
 		}
 	}
-	public function process(){
+	public function process_add(){
 		$post = $this->input->post(null, TRUE);
-		if(isset($_POST['add'])){
 			$this->customer_m->add($post);
-		} else if(isset($_POST['edit'])){
-			$this->customer_m->edit($post);
-		} 
 		if($this->db->affected_rows()>0){
 			$this->session->set_flashdata('success','Data berhasil disimpan');
 		}
@@ -73,5 +69,17 @@ class Customer extends CI_Controller {
 			'row' => $customer
 		);
 		$this->template->load('template', 'customer/customer_form', $data);
+	}
+	public function process(){
+		$post = $this->input->post(null, TRUE);
+		if(isset($_POST['add'])){
+			$this->customer_m->add($post);
+		} else if(isset($_POST['edit'])){
+			$this->customer_m->edit($post);
+		} 
+		if($this->db->affected_rows()>0){
+			$this->session->set_flashdata('success','Data berhasil disimpan');
+		}
+		redirect('customer');
 	}
 }

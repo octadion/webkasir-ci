@@ -13,11 +13,23 @@
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Products</h3>
-     <div class="pull-right">
-        <a href="<?=site_url('item/add')?>" class="btn btn-primary btn-flat">
-        <i class="fa fa-plus"></i> Create Product Item
+     <br>
+     <br>
+     <div class="">
+        <a href="<?=site_url('item/add')?>" class="btn btn-success"> 
+        <i class="fa fa-plus"></i> Create
+        </a>
+        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <i class="fa fa-upload"></i> Import
+        </a>
+        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
+        <i class="fa fa-refresh"></i> Refresh
         </a>
      </div>
+     <div class="">
+       
+     </div>
+     <br>
      
      </div>
      <div class="box-body table-responsive">
@@ -36,54 +48,41 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <?php
-                $no = 1;
-                foreach($row->result() as $key=> $data)
-                { ?>
-                <tr>
-                    <td style="width: 5%;"><?=$no++?>.</td>
-                    <td>
-                        <?=$data->barcode?>
-                        <a href="<?=site_url('item/barcode_qrcode/'.$data->item_id)?>" class="btn btn-default btn-xs">
-                            Generate<i class="fa fa-barcode"></i>
-                        </a>
-                    </td>
-                    <td><?=$data->name?></td>
-                    <td><?=$data->category_name?></td>
-                    <td><?=$data->unit_name?></td>
-                    <td><?=$data->price?></td>
-                    <td><?=$data->stock?></td>
-                    <td>
-                        <?php if($data->image !=null) {?>
-                        <img src="<?=base_url('uploads/product/'.$data->image)?>" style="width:50px">
-                        <?php } else { ?>
-                            <img src="<?=base_url('uploads/product/notfound.jpg')?>" style="width:50px">
-                            <?php } ?>
-                    </td>
-                    <td class="text-center" width="160px">
-                    <a href="<?=site_url('item/edit/'.$data->item_id)?>" class="btn btn-primary btn-xs">
-                            <i class="fa fa-pencil"></i> Update
-                        </a>
-                        <a href="<?=site_url('item/del/'.$data->item_id)?>" onclick="return confirm('Yakin hapus data?')"class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash"></i> Delete
-                        </a>
-                        
-                    </td>
-                   
-                </tr>
-                <?php
-                }
-                ?> -->
+    
             </tbody>
         </table>
      </div>
      </div>
  </section>
+ <div class="modal fade" id="modal-detail" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <img id="imagepreview"src="" alt="">
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
  <script>
         $(document).ready(function(){
                 $('#table1').DataTable({
                 "processing": true,
                 "serverSide": true,
+                "scrollY":true,
                 "ajax":{
                     "url": "<?= site_url('item/get_ajax')?>",
                     "type": "POST"
@@ -107,3 +106,12 @@
         })
 
         </script>
+        <script>
+           $(document).ready(function () {
+     $(document).on('click','#detail',function(){
+        var imagepreview = $(this).data('imagepreview');
+        $('#imagepreview').attr('<img src="data:image/png;base64,' + imagepreview + '" />');
+    })
+  })
+        </script>
+        

@@ -31,7 +31,7 @@ class Supplier extends CI_Controller {
 		if($error['code'] != 0){
 			echo '<div id="flash" data-flash="'.$this->session->flashdata('success').'"></div>';
 		} else {
-			echo '<div id="flash" data-flash="'.$this->session->flashdata('success').'"></div>';
+			echo '<div id="flash" data-flash="'.$this->session->flashdata('error').'"></div>';
 		}
 		echo "<script>window.location='".site_url('supplier')."';</script>";
 	}
@@ -49,13 +49,9 @@ class Supplier extends CI_Controller {
 			echo "<script>window.location='".site_url('supplier')."';</script>";
 		}
 	}
-	public function process(){
+	public function process_add(){
 		$post = $this->input->post(null, TRUE);
-		if(isset($_POST['add'])){
 			$this->supplier_m->add($post);
-		} else if(isset($_POST['edit'])){
-			$this->supplier_m->edit($post);
-		} 
 		if($this->db->affected_rows()>0){
 			$this->session->set_flashdata('success','Data berhasil disimpan');
 		}
@@ -73,5 +69,17 @@ class Supplier extends CI_Controller {
 			'row' => $supplier
 		);
 		$this->template->load('template', 'supplier/supplier_form', $data);
+	}
+	public function process(){
+		$post = $this->input->post(null, TRUE);
+		if(isset($_POST['add'])){
+			$this->supplier_m->add($post);
+		} else if(isset($_POST['edit'])){
+			$this->supplier_m->edit($post);
+		} 
+		if($this->db->affected_rows()>0){
+			$this->session->set_flashdata('success','Data berhasil disimpan');
+		}
+		redirect('supplier');
 	}
 }
