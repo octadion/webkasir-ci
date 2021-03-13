@@ -12,7 +12,7 @@ class Sale extends CI_Controller {
     }
 
 
-	public function index()
+	public function index()	
 	{
 		$this->load->model('customer_m');
 		$customer = $this->customer_m->get()->result();
@@ -25,5 +25,20 @@ class Sale extends CI_Controller {
 
 		);
 		$this->template->load('template', 'transaction/sale/sale_form', $data);
+	}
+
+	public function process_payment()
+	{
+		$post = $this->input->post(null, TRUE);
+		// $data = array(
+		// 	'test' => $post,
+		// );
+		$this->sale_m->add($post);
+		if($this->db->affected_rows()>0){
+			$this->session->set_flashdata('success','Data stock-in berhasil disimpan');
+	
+		}
+		// redirect('sale');
+		// $this->template->load('template', 'transaction/sale/test', $data);
 	}
 }

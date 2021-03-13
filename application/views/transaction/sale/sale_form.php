@@ -68,7 +68,7 @@
                                     <input type="hidden" name="price" id="price">
                                     <input type="hidden" name="stock" id="stock">
                                     <input type="hidden" name="item_name" id="item_name">
-                                    <input type="text" name="barcode" id="barcode" class="form-control" data-toggle="modal" data-target="#modal-item" autocomplete="off" required autofocus>
+                                    <input type="text" name="barcode" id="barcode" class="form-control" data-toggle="modal" data-target="#modal-item" autocomplete="off" autofocus>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-item">
                                             <i class="fa fa-search"></i>
@@ -231,13 +231,12 @@
                 <button type="reset" id="cancel_payment" class="btn btn-flat btn-warning">
                     <i class="fa fa-refresh"></i> Cancel
                 </button><br><br>
-                <button id="process_payment" class="btn btn-flat btn-lg btn-success">
+                <button type="submit" id="process_payment" class="btn btn-flat btn-lg btn-success">
                     <i class="fa fa-paper-plane-0"></i> Process Payment
                 </button>
             </div>
         </div>
     </div>
-
  </section>
 
  <div class="modal fade" id="modal-item">
@@ -280,6 +279,49 @@
                             </td>
                         </tr>
                         <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ </div>
+
+ <div class="modal fade" id="modal-edit">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Stock In Detail</h4>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table-bordered no-margin">
+                    <tbody>
+                        <tr>
+                            <th style="width: 35%">Barcode</th>
+                            <td><span id="barcode"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Item Name</th>
+                            <td><span id="item_name"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td><span id="detail"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Qty</th>
+                            <td><span id="supplier_name"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Discount Item</th>
+                            <td><span id="qty"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td><span id="date"></span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -374,7 +416,6 @@ $(document).ready(function () {
             var total_count = row_value.price_value * document.getElementById('qty').value;
 
             // input row
-
             if(already_in == false){
                 no_value++;
                 rows.push(row_value);
@@ -404,17 +445,21 @@ $(document).ready(function () {
 
             // grand total
             grandTotal_subTotal_refresh()
+            console.log(rows);
+            console.log(receipt);
+            console.log(row_value);
         }
      })
 
      $("#discount").on('keyup keypress change' ,function() {
-        var edValue = document.getElementById("discount");
-        receipt.discount_total = isNaN(parseInt(edValue.value)) ? 0 : parseInt(edValue.value);
+        var edValue                = document.getElementById("discount");
+            receipt.discount_total = isNaN(parseInt(edValue.value)) ? 0 : parseInt(edValue.value);
         grandTotal_subTotal_refresh();
+        console.log(receipt);
      });
 
      $("#cash").on('keyup keypress change' ,function() {
-        receipt.cash = isNaN(parseInt(document.getElementById('cash').value)) ? 0 : parseInt(document.getElementById('cash').value);
+        receipt.cash   = isNaN(parseInt(document.getElementById('cash').value)) ? 0 : parseInt(document.getElementById('cash').value);
         receipt.change = receipt.cash - receipt.grand_total;
         // receipt.change < 0 ? $('#change_div').addClass("has-error") : $('#change_div').removeClass("has-error");
         $('#change').val(receipt.change);
@@ -447,18 +492,63 @@ $(document).ready(function () {
         if(receipt.cash < receipt.grand_total){
             alert('duit kurang');
         }
+        else if(receipt.grand_total < 1 || isNaN(receipt.grand_total) || isNaN(receipt.sub_total) || receipt.sub_total < 1 || rows.length < 0){
+            alert('dih gajelas');
+        }
         else{
-            receipt.invoice = <?php echo json_encode($invoice); ?>;
+            receipt.invoice     = <?= json_encode($invoice); ?>;
             receipt.customer_id = document.getElementById("customer").value;
-            receipt.note = document.getElementById("note").value;
-            receipt.cart = rows;
-            receipt.date = document.getElementById("date").value;
+            receipt.note        = document.getElementById("note").value;
+            receipt.cart        = rows;
+            receipt.date        = document.getElementById("date").value;
+            receipt.user_id     = <?= json_encode($this->fungsi->user_login()->user_id) ?>;
             console.log(receipt);
+
+            $.redirect("<?= base_url("sale/process_payment") ?>", receipt, "POST");
+            
         }
 
      }); 
 
-     // yg belom edit button, ux delete/change, process payment, cancel button,
 
+
+     // yg belom edit button, ux delete/change, process payment
+
+     $(document).on('click','#cancel_payment',function(){
+        rows      = [];
+        row_value = [];
+        receipt   = {};
+        no_value  = 0;
+
+        receipt.cash           = 0;
+        receipt.change         = 0;
+        receipt.discount_total = 0;
+        receipt.grand_total    = 0;
+        receipt.sub_total      = 0;
+        receipt.date           = <?= json_encode(date('Y-m-d')) ?>
+
+        $('#date').val(receipt.date);
+        $('#barcode').val('');
+        $('#qty').val('1');
+        $('#customer').val('');
+        $('#sub_total').val('');
+        $('#discount').val(0);
+        $('#grand_total').val('');
+        $('#grand_total2').text('0');
+        $('#cash').val(0);
+        $('#change').val('');
+        $('#note').val('');
+        $("#table2 tbody tr").remove();
+
+        var no_item_html =  
+        `
+            <tr>
+                <td colspan="9" class="text-center">Tidak ada item</td>
+            </tr>
+        `;
+        $('#table2 > tbody').append(no_item_html);
+
+        console.log(receipt);
+     }); 
   })
 </script>

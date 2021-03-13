@@ -19,5 +19,22 @@ class Sale_m extends CI_Model {
         return $invoice;
     }
 
+    public function add($post)
+    {
+        $params = [
+            'invoice' => $post['invoice'],
+            'customer_id' => $post['customer_id'],
+            'total_price' => $post['sub_total'],
+            'discount' => $post['discount_total'],
+            'final_price' => $post['grand_total'],
+            'cash' => $post['cash'],
+            'remaining' => $post['change'],
+            'note' => $post['note'],
+            'date' => $post['date'],
+            'user_id' => $post['user_id'],
+        ];
+        $this->db->insert('t_sale', $params);
+    }
+
 }
 
