@@ -36,9 +36,9 @@
         <table class="table table-bordered table-striped" id="table-category">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th width="5%">#</th>
                     <th>Name</th>
-                    <th>Actions</th>
+                    <th width="160px">Actions</th>
                 </tr>
             </thead>
             <tbody>

@@ -32,13 +32,13 @@
                     <label for="barcode">Barcode *</label>
                     </div>
                     <div class="form-group input-group">
-                    <input type="hidden" name="item_id" id="item_id">
-                    <input type="text" name="barcode" id="barcode" class="form-control" required autofocus>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-item">
-                        <i class="fa fa-search"></i>
-                        </button>
-                    </span>
+                        <input type="hidden" name="item_id" id="item_id">
+                        <input type="text" name="barcode" id="barcode" class="form-control" required autofocus>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-item">
+                            <i class="fa fa-search"></i>
+                            </button>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="item_name">Item Name *</label>

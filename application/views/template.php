@@ -179,6 +179,7 @@
             </section>
         </aside>
         <script src="<?=base_url()?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="<?=base_url()?>assets/dist/js/jquery.redirect.js"></script>
         <script src="<?=base_url()?>assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url()?>assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
         <!-- Content Wrapper -->
@@ -206,6 +207,9 @@
     <script src="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?=base_url()?>assets/dist/js/sweetalert-dev.js"></script>
     <script src="<?=base_url()?>assets/dist/js/jquery.auto.pagination.min.js"></script>
+
+    <script src="<?=base_url()?>assets/dist/js/jqBootstrapValidation.js"></script>
+    
     <script>
     var flash = $('#flash').data('flash');
     if(flash){
