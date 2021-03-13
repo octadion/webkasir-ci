@@ -133,6 +133,38 @@
         </div>
     </div>
  </div>
+ <div class="modal fade" id="modal-import">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Import Supplier</h4>
+            </div>
+            <div class="modal-body">
+            <?php echo 
+           form_open_multipart('supplier/import',array('name' => 'spreadsheet'));
+            ?>
+            <div class="form-group">
+                        <label>Import *</label>
+                        <input type="hidden" name="id" >
+                        <input type="file" name="upload_file" id="upload_file"   class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="" class="btn btn-success btn-flat">
+                            <i class="fa fa-paper-plane"></i>  Upload Excel
+                        </button>
+                       
+                        
+                    </div>
+
+            </form>
+            <?php echo form_close() ;?>
+            </div>
+        </div>
+    </div>
+ </div>
  <script>
     $("#table-supplier").DataTable({
         "processing" : true,
