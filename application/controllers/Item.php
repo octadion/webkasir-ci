@@ -110,11 +110,11 @@ class Item extends CI_Controller {
 							$this->session->set_flashdata('success','Data berhasil disimpan');
 					
 						}
-						redirect('item');
+						// redirect('item');
 					} else {
 						$error = $this->upload->display_error();
 						$this->session->set_flashdata('error', $error);
-				redirect('item/add');
+				// redirect('item/add');
 
 					}
 					
