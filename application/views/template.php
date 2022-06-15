@@ -9,9 +9,16 @@
     <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/AdminLTE.min.css">
+    <!-- <link rel="stylesheet" href="<?=base_url()?>assets/daterangepicker.css"> -->
     <link rel="stylesheet" href="<?=base_url()?>assets/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/bower_components/Ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script> -->
+ <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" /> -->
+ <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -166,8 +173,8 @@
                         <ul class="treeview-menu">
                             <li <?=$this->uri->segment(1) == 'report'&& $this->uri->segment(2) == 'sale' ? 'class="active"': ''?>>
                             <a href="<?=site_url('report/sale')?>"><i class="fa fa-circle-o"></i> Sales</a></li>
-                            <li <?=$this->uri->segment(1) == 'report' && $this->uri->segment(2) == 'stock' ? 'class="active"': ''?>>
-                            <a href="<?=site_url('report/stock')?>"><i class="fa fa-circle-o"></i> Stocks</a></li>
+                            <!-- <li <?=$this->uri->segment(1) == 'report' && $this->uri->segment(2) == 'stock' ? 'class="active"': ''?>>
+                            <a href="<?=site_url('report/stock')?>"><i class="fa fa-circle-o"></i> Stocks</a></li> -->
                         </ul>
                     </li>
                     <?php if($this->fungsi->user_login()->level ==1) { ?>
@@ -182,6 +189,17 @@
         <script src="<?=base_url()?>assets/dist/js/jquery.redirect.js"></script>
         <script src="<?=base_url()?>assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url()?>assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    
+
+    <script src="<?= base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/dataTables.buttons.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/jszip.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/pdfmake.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/vfs_fonts.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/buttons.html5.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/buttons/buttons.print.min.js"></script>
         <!-- Content Wrapper -->
         <div class="content-wrapper">
             <?php echo $contents ?>
@@ -195,21 +213,35 @@
         </footer>
  
     </div>
-    <script src="<?=base_url()?>assets/highcharts/highcharts.js"></script>
-    <script src="<?=base_url()?>assets/highcharts/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    
+    <!-- <script src="<?=base_url()?>assets/highcharts/highcharts.js"></script> -->
+    <!-- <script src="<?=base_url()?>assets/highcharts/exporting.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/modules/export-data.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="<?=base_url()?>assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?=base_url()?>assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <script src="<?=base_url()?>assets/dist/js/adminlte.min.js"></script>
-
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
     <script src="<?=base_url()?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?=base_url()?>assets/dist/js/sweetalert-dev.js"></script>
     <script src="<?=base_url()?>assets/dist/js/jquery.auto.pagination.min.js"></script>
-
+<!-- <script src="<?=base_url()?>assets/daterangepicker.min.js"></script> -->
+<!-- <script src="<?=base_url()?>assets/js/daterangepicker.js"></script> -->
     <script src="<?=base_url()?>assets/dist/js/jqBootstrapValidation.js"></script>
-    
+    <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
+    <!-- <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/sugar.min.js'></script> -->
+    <!-- <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.js"></script> -->
+    <!-- <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/jquery-ui-1.10.3-custom.min.js"></script>    -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script> -->
+<!-- <script src="http://jquery-ui.googlecode.com/svn/tags/1.8.22/"></script> -->
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script> -->
+<!-- <script type='text/javascript' src='<?php echo base_url(); ?>assets/script.js'></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script> -->
     <script>
     var flash = $('#flash').data('flash');
     if(flash){
@@ -240,194 +272,67 @@
         })
     })
     </script>
-    <script>
+   <script>
   $(document).ready(function () {
     //$('.sidebar-menu').tree()
      $('#table1').DataTable()
   })
 </script>
-<script type="text/javascript">
-  Highcharts.chart('item', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Data Penjualan'
-    },
-    subtitle: {
-        text: 'Source: mykasir.com'
-    },
-    xAxis: {
-        categories: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun'
-        ],
-        crosshair: true
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Item'
-        }
-    },
-    tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [{
-        name: 'Indomilk',
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0]
 
-    }, {
-        name: 'Indomie',
-        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5]
 
-    }, {
-        name: 'Kinder Joy',
-        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3]
+<!-- <script type="text/javascript">
+function grafik(div) {
+		$.ajax({
+			type: 'ajax',
+			url: '<?=base_url("dashboard/grafik")?>',
+			async: false,
+			dataType: 'json',
+			success: function(response) {
+				console.log(response);
 
-    }, {
-        name: 'Indofood',
-        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5]
+				// Build the chart
+				Highcharts.chart(div, {
+					chart: {
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false,
+						type: 'pie'
+					},
+					title: {
+						text: 'Item'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					accessibility: {
+						point: {
+							valueSuffix: '%'
+						}
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},				
+					series: [{
+						name: 'Jumlah',
+						colorByPoint: true,
+						data: response.data
+					}]
+				});
+			}
+		});
+		return false;
 
-    }]
-});
-</script>
-<script type="text/javascript">
-Highcharts.chart('item-laris', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Data Penjualan'
-    },
-    subtitle: {
-        text: 'Source: mykasir.com'
-    },
-    xAxis: {
-        categories: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec'
-        ],
-        crosshair: true
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Item'
-        }
-    },
-    tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [{
-        name: 'Indomilk',
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+	}
+</script> -->
 
-    }, {
-        name: 'Indomie',
-        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
 
-    }, {
-        name: 'Kinder Joy',
-        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-    }, {
-        name: 'Indofood',
-        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-
-    }]
-});
-Highcharts.chart('stock', {
-    chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-    },
-    title: {
-        text: 'Browser market shares in January, 2018'
-    },
-    tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    accessibility: {
-        point: {
-            valueSuffix: '%'
-        }
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: false
-            },
-            showInLegend: true
-        }
-    },
-    series: [{
-        name: 'Brands',
-        colorByPoint: true,
-        data: [{
-            name: 'Chrome',
-            y: 61.41,
-            sliced: true,
-            selected: true
-        }, {
-            name: 'Internet Explorer',
-            y: 11.84
-        }, {
-            name: 'Firefox',
-            y: 10.85
-        }, {
-            name: 'Edge',
-            y: 4.67
-        }, {
-            name: 'Safari',
-            y: 4.18
-        }, {
-            name: 'Other',
-            y: 7.05
-        }]
-    }]
-});
-</script>
 
 </body>
 </html>

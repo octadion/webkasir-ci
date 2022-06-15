@@ -7,12 +7,14 @@
 <div id="header-toko" ><b>MYKASIR</b>
 <br><small>Phicos Group
 Surakarta</small></div>
-
+<?=print_r($data)?>
+<?=print_r(['total_penjualan'])?>
 <section class="content">
 <div class="row">
   <div class="col-md-12">
 
               </div>
+              <?php if($this->fungsi->user_login()->level ==1) { ?>
 <div class="col-lg-3 col-xs-6">
   
           <!-- small box -->
@@ -73,13 +75,37 @@ Surakarta</small></div>
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+        <?php } ?>
       
         <!-- /.col -->
       </div>
+   
       <div class="col-md-8">
+      <!-- <div class="form-group">
+      <div class="form-group input-group">
+      <form action="" method="get" id="formsearch">
+                                    <input type="date" name="from"class="form-control" id="from" autofocus value="">
+                                   
+                                </div>
+                                <div class="form-group">
+                                <label for="sd">s/d</label>
+                                </div>
+                                <div class="form-group input-group">
+                                <input type="date" id="to" name="to" autofocus class="form-control"value="">
+                                <button type="submit"id="" valiue="submit" class="btn btn-flat btn-lg-4 btn-info right">
+                                    <i class="fa fa-search"></i> Filter
+                                </button>
+      </form>                </div>
+      </div> -->
       <div class="box box-success">
+      <div class="pull-right box-tools">
+      <!-- <div class="col-md-2"> -->
+     
+      <!-- </div> -->
+              </div>
       <div class="row">
-        
+      
+      
           <div id="item"></div>
         
       </div>
@@ -111,7 +137,8 @@ Surakarta</small></div>
           </div>
       </div>
       <!-- /.row -->
-     
+      <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+<!-- <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script> -->
  </section>
  <script>
         $(document).ready(function(){
@@ -131,3 +158,19 @@ Surakarta</small></div>
         })
 
         </script>
+    <script>
+  $(document).ready(function () {
+    //$('.sidebar-menu').tree()
+     $('#table1').DataTable()
+    //  grafik('item');
+  
+        Morris.Bar({
+          element: 'item',
+          data: <?php echo $data;?>,
+          xkey: 'datetime',
+          ykeys: ['total', 'total_penjualan'],
+          labels: ['total', 'total_penjualan']
+        });
+  
+  })
+</script>

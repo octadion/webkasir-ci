@@ -19,12 +19,12 @@
         <a href="<?=site_url('item/add')?>" class="btn btn-success"> 
         <i class="fa fa-plus"></i> Create
         </a>
-        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <!-- <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
         <i class="fa fa-upload"></i> Import
         </a>
         <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-refresh"></i> Refresh
-        </a>
+        </a> -->
      </div>
      <div class="">
        
@@ -61,11 +61,12 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Product Image</h4>
           </div>
           <div class="modal-body">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <img id="imagepreview"src="" alt="">
+                    <img id="imagepreview" class="img" style="width:100%" src="" alt="">
                 </div>
             </div>
             <div class="modal-footer">
@@ -109,8 +110,10 @@
         <script>
            $(document).ready(function () {
      $(document).on('click','#detail',function(){
-        var imagepreview = $(this).data('imagepreview');
-        $('#imagepreview').attr('<img src="data:image/png;base64,' + imagepreview + '" />');
+        var image = $(this).data('image');
+        var base_url = '<?= base_url(); ?>';
+        console.log(image);
+        $('#imagepreview').attr('src',base_url+'uploads/product'+'/'+image);
     })
   })
         </script>

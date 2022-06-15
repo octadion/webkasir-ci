@@ -9,22 +9,22 @@
  </section>
 <section class="content">
 <?php //$this->view('message')?>
-<!-- <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div> -->
+    <div id="flash" data-flash="<?=$this->session->flashdata('success');?>"></div>
      <div class="box">
      <div class="box-header">
      <h3 class="box-title">Data Suppliers</h3>
      <br>
      <br>
      <div class="">
-        <a href="" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
+     <a href="<?=site_url('supplier/add')?>" class="btn btn-success"> 
         <i class="fa fa-plus"></i> Create
         </a>
-        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <!-- <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
         <i class="fa fa-upload"></i> Import
         </a>
         <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-refresh"></i> Refresh
-        </a>
+        </a> -->
      </div>
      <div class="">
        
@@ -61,7 +61,7 @@
                 <h4 class="modal-title">Supplier</h4>
             </div>
             <div class="modal-body">
-            <form action="<?=base_url(('supplier/process_add'))?>" id="form_supplier" method="post">
+            <form action="<?=base_url('supplier/process_add')?>" id="form_supplier" method="post">
             <div class="form-group">
                         <label>Supplier Name *</label>
                         <input type="hidden" name="id" >

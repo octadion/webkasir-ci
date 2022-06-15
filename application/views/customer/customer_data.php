@@ -16,15 +16,15 @@
      <br>
      <br>
      <div class="">
-        <a href="" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
+     <a href="<?=site_url('customer/add')?>" class="btn btn-success"> 
         <i class="fa fa-plus"></i> Create
         </a>
-        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
+        <!-- <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
         <i class="fa fa-upload"></i> Import
         </a>
         <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-refresh"></i> Refresh
-        </a>
+        </a> -->
      </div>
      <div class="">
        

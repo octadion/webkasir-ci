@@ -20,9 +20,9 @@
         <a href="<?=site_url('stock/out/add')?>" class="btn btn-success">
         <i class="fa fa-plus"></i> Create
         </a>
-        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
+        <!-- <a href="" class="btn btn-warning" data-toggle="modal" data-target="#modal-create">
         <i class="fa fa-refresh"></i> Refresh
-        </a>
+        </a> -->
      </div>
      <div class="">
        

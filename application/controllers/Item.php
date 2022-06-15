@@ -25,7 +25,7 @@ class Item extends CI_Controller {
             $row[] = $item->unit_name;
             $row[] = indo_currency($item->price);
             $row[] = $item->stock;
-            $row[] = '<a id="detail" data-toggle="modal" data-target="#modal-detail" data-image="'.$item->image.'" src="'.base_url('uploads/product/'.$item->image).'"class="btn btn-default btn-xs">
+            $row[] = '<a id="detail" data-toggle="modal" data-target="#modal-detail" data-image="'.$item->image.'" class="btn btn-default btn-xs">
 			<i class="fa fa-eye"></i> Detail</a>';
 			
 			//$item->image != null ? '<img src="'.base_url('uploads/product/'.$item->image).'" class="img" style="width:100px">' : null;
@@ -110,11 +110,11 @@ class Item extends CI_Controller {
 							$this->session->set_flashdata('success','Data berhasil disimpan');
 					
 						}
-						// redirect('item');
+						redirect('item');
 					} else {
 						$error = $this->upload->display_error();
 						$this->session->set_flashdata('error', $error);
-				// redirect('item/add');
+				redirect('item/add');
 
 					}
 					

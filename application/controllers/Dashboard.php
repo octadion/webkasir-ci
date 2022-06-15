@@ -7,15 +7,19 @@ class Dashboard extends CI_Controller {
 	{
 		parent::__construct();
 		check_not_login();
-		$this->load->model(['item_m', 'unit_m', 'category_m']);
+		$this->load->model(['item_m', 'unit_m', 'category_m','sale_m']);
 
 
 	}
 	public function index()
 	{
 		check_not_login();
-		$this->template->load('template', 'dashboard');
+		$data = $this->sale_m->get_data()->result();
+		$x['data'] = json_encode($data);
+		$this->template->load('template', 'dashboard', $x);
 	}
+
+	
 	public function data()
 	{
 
@@ -58,5 +62,52 @@ class Dashboard extends CI_Controller {
         echo json_encode($output);
     }
 
+	public function grafik(){
+		$this->db->select('name, stock as total ');
+		$this->db->group_by('item_id');
+		// $this->db->where('a.aktif', '1');
+		$this->db->order_by('name', 'asc');
+		// $this->db->join('ref_kecamatan b', 'kecamatan_id = a.id_kecamatan', 'left');
+		$total = $this->db->get('p_item')->result();
+
+		$this->db->select('*');
+		// $this->db->where('a.aktif', '1');
+		// $this->db->join('ref_kecamatan b', 'kecamatan_id = a.id_kecamatan', 'left');
+		$total_item = $this->db->get('p_item')->num_rows();		
+
+		foreach ($total as $key) {
+			$row['name']	= $key->name;
+			$row['total']	= $key->total;
+			$row['y']		= @$key->total ? (float) number_format(($key->total / $total_item) * 100, 2) : 0;
+			$data[] = $row;
 		}
+		echo json_encode([
+			'data' => $data
+		]);
+	}
+	public function grafik2(){
+		$this->db->select('invoice, date, sale_id as total ');
+		$this->db->group_by('date');
+		// $this->db->where('a.aktif', '1');
+		$this->db->order_by('invoice', 'asc');
+		// $this->db->join('ref_kecamatan b', 'kecamatan_id = a.id_kecamatan', 'left');
+		$total = $this->db->get('t_sale')->result();
+
+		$this->db->select('*');
+		// $this->db->where('a.aktif', '1');
+		// $this->db->join('ref_kecamatan b', 'kecamatan_id = a.id_kecamatan', 'left');
+		$total_item = $this->db->get('t_sale')->num_rows();		
+
+		foreach ($total as $key) {
+			$row['invoice']	= $key->invoice;
+			$row['total']	= $key->total;
+			$row['y']		= @$key->total ? (float) number_format(($key->total / $total_item) * 100, 2) : 0;
+			$data[] = $row;
+		}
+		echo json_encode([
+			'data' => $data
+		]);
+	}
+
+}
 

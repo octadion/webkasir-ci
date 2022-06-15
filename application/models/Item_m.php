@@ -118,5 +118,14 @@ class Item_m extends CI_Model {
     $sql = "UPDATE p_item SET stock = stock - '$qty' WHERE item_id = '$id'";
     $this->db->query($sql);
   }
+  function update_stock_out_payment($post)
+  {
+    foreach($post['cart'] as $pos){
+    $qty = $pos['qty_value'];
+    $id = $pos['item_id_value'];
+    $sql = "UPDATE p_item SET stock = stock - '$qty' WHERE item_id = '$id'";
+    $this->db->query($sql);
+    }
+  }
 
 }

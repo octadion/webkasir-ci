@@ -36,6 +36,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <td style="vertical-align: top; width: 30%">
+                                <label for="user">Email</label>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" name="email" id="email" value="" class="form-control">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="vertical-align: top">
                                 <label for="customer">Customer</label>
                             </td>
@@ -374,6 +384,7 @@ $(document).ready(function () {
         
         $('#item_id').val(row_value.item_id_value);
         $('#barcode').val(row_value.barcode_value);
+        $('#item_name').val(row_value.item_name_value);
         $('#modal-item').modal('hide');
      })
 
@@ -429,7 +440,7 @@ $(document).ready(function () {
                 }
                 var action_value_html =  
                 `
-                    <button class="update_row btn btn-primary btn-xs" data-row="row`+no_value+`"><i class="fa fa-edit"></i> Edit</button>
+                   
                     <button class="delete_row btn btn-danger btn-xs" data-row="row`+no_value+`"><i class="fa fa-trash"></i> Hapus</button>
                 `;
                 $('#table2 > tbody > tr:last').append('<td>'+action_value_html+'</td>');
@@ -488,6 +499,11 @@ $(document).ready(function () {
         grandTotal_subTotal_refresh();
      });
 
+     $("#cart_table").on('click','.update_row',function(){
+
+
+     });
+
      $(document).on('click','#process_payment',function(){
         if(receipt.cash < receipt.grand_total){
             alert('duit kurang');
@@ -502,11 +518,18 @@ $(document).ready(function () {
             receipt.cart        = rows;
             receipt.date        = document.getElementById("date").value;
             receipt.user_id     = <?= json_encode($this->fungsi->user_login()->user_id) ?>;
+            receipt.qty         = document.getElementById("qty").value;
+            receipt.item_id     = document.getElementById("item_id").value;
+            receipt.email       = document.getElementById("email").value;
+            receipt.name      = document.getElementById("item_name").value;
             console.log(receipt);
 
             $.redirect("<?= base_url("sale/process_payment") ?>", receipt, "POST");
             
+            
         }
+      
+
 
      }); 
 
@@ -538,6 +561,7 @@ $(document).ready(function () {
         $('#cash').val(0);
         $('#change').val('');
         $('#note').val('');
+        $('#email').val('');
         $("#table2 tbody tr").remove();
 
         var no_item_html =  

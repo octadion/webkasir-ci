@@ -13,16 +13,71 @@ class Report extends CI_Controller {
 
 
     }
+
+    function get_ajax() {
+        $list = $this->report_m->get_datatables();
+        $total_order = 0;
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no.".";
+            $row[] = $item->invoice;
+            $row[] = $item->date;
+            $row[] = $item->customer_name;
+          
+            $row[] = indo_currency($item->total_price);
+            $row[] = $item->discount;
+            $row[] = indo_currency($item->final_price);
+            $row[] = '
+            <a id="set_dtl"class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-detail" 
+            data-invoice="'.$item->invoice.'"
+            data-date="'.$item->date.'"
+            data-customer="'.$item->customer_name.'"
+            data-total="'.$item->total_price.'"
+            data-discount="'.$item->discount.'"
+            data-grandtotal="'.$item->final_price.'"
+            data-note="'.$item->note.'"
+            data-item_name="'.$item->item_name.'"
+            data-price="'.$item->item_price.'"
+            data-sale_id="'.$item->sale_id.'"> <i class="fa fa-eye"></i> Detail
+            </a>
+            <a href="'.site_url('report/cetak_invoice/'.$item->sale_id).'" class="btn btn-info btn-xs" target="_blank" > <i class="fa fa-print"></i>Print</a>
+                    <a href="'.site_url('report/del/'.$item->sale_id).'" id="btn-hapus"  class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a>';
+                $data[] = $row;
+        }
+        $output = array(
+                    "draw" => @$_POST['draw'],
+                    "recordsTotal" => $this->report_m->count_all(),
+                    "recordsFiltered" => $this->report_m->count_filtered(),
+                    "data" => $data,
+                    // 'total'    => indo_currency($total_order, 2)
+                );
+        // output to json format
+        echo json_encode($output);
+    }
+    public function index()
+	{
+		$data['row'] = $this->report_m->get_index();
+		$this->template->load('template', 'report/report_sale/report_sale_data', $data);
+	}
     public function report_sale_data(){
+		$this->load->model('customer_m');
+		$customer = $this->customer_m->get()->result();
+        $row = $this->report_m->get_sale()->result();
+        $data = array(
+            'customer' => $customer,
+            'row' => $row
+        );
 		
-		$data['row'] = $this->report_m->get_sale()->result();
         $this->template->load('template', 'report/report_sale/report_sale_data', $data);
         }
         public function report_stock_data(){
-            $data['row'] = $this->stock_m->get_all()->result();
-        $this->template->load('template', 'report/report_stock/report_stock_data', $data);
+            // $data['year_list'] = $this->report_m->fetch_year();
+        $this->template->load('template', 'report/report_stock/report_stock_data');
         }
-    
+       
         public function getData(){
             $data = $this->report_m->get_sale()->result();
             echo json_encode($data);
@@ -35,10 +90,52 @@ class Report extends CI_Controller {
 		} else {
 			echo '<div id="flash" data-flash="'.$this->session->flashdata('success').'"></div>';
 		}
-		echo "<script>window.location='".site_url('report/report_sale')."';</script>";
+		echo "<script>window.location='".site_url('report/sale')."';</script>";
 	}
+    public function get_item_list(){
+        // $product_id = $this->input->get('product_id');
+        $id = $this->input->get('id');
+        // print_r($id);
+        $barang = $this->db
+        ->select('t_sale.*, sale_detail.name as item_name, sale_detail.price as item_price')
+        ->join('sale_detail', 'sale_detail.sale_id = t_sale.sale_id', 'left')
+        ->get_where('t_sale', [
+            // 'product_id' => $product_id,
+            // 'orders.deleted_at' => null,
+            't_sale.sale_id' => $id,
+        
+        ])->result();
+
+    $result = [];
+    foreach ($barang as $brg) {
+        $result[] = [
+            // 'id' => $brg->id,
+            // 'product_id' => $brg->product_id,
+            'item_name' => $brg->item_name,
+            'item_price' => $brg->item_price,
+            // 'qty' => $brg->qty,
+           
+        ];
+    }
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($result));
+
+    
+    }
     function export_excel(){
-        $data['row'] = $this->report_m->get_sale()->result();
+        if(isset($_GET['from']) && isset($_GET['to'])){
+			$data['row'] = $this->report_m->get_date();
+        } else if(isset($_GET['customer_name'])){
+			$data['row'] = $this->report_m->get_customer();
+        }
+        else if(isset($_GET['invoice'])){
+			$data['row'] = $this->report_m->get_invoice();
+        }
+        else {
+            $data['row'] = $this->report_m->get_sale()->result();
+        }
         $objPHPExcel = new Spreadsheet;
  
         $objPHPExcel->setActiveSheetIndex(0)
@@ -79,6 +176,7 @@ class Report extends CI_Controller {
     }
     function cetak_invoice($id){
 		$data['row'] = $this->report_m->get($id)->row();
+        $data['item'] = $this->report_m->get_item($id)->result();
 		$html = $this->load->view('report/report_sale/cetak_invoice', $data, true);
 		$this->fungsi->PdfGenerator($html, 'Invoice-'.$data['row']->invoice, 'A4', 'portrait');
 	}

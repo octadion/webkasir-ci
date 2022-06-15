@@ -221,8 +221,9 @@
             </tr>
             
             <tr class="total">
-                <td></td>
+                <td>
                 Final Price
+                </td>
                 <td>
                    Total: <?=$row->final_price?>
                 </td>

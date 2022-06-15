@@ -11,9 +11,27 @@
  <div class="row">
     <div class="col-md-6">
         <div class="box-header with-border">
-            <div class="box-body">
-                <div id="item-laris"></div>
-            </div>
+        <form class="form-horizontal">
+
+            <fieldset>
+
+                <div class="input-prepend">
+
+                    <span class="add-on"><i class="icon-calendar"></i> </span> <input
+
+                        type="text" name="range" id="range" />
+
+                </div>
+
+            </fieldset>
+
+            </form>
+            <div id="msg"></div>
+
+            <div id="chart"></div>
+            <!-- <div class="panel-body">
+                <div id="report" style="width: 1000px; height: 620px;"></div>
+            </div> -->
         </div>
     
     </div>
@@ -26,5 +44,3 @@
     </div>
         
 </div>
-      <script>
-      </script>
